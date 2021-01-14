@@ -234,7 +234,7 @@ PrefabInstance:
     - target: {fileID: 3139662336709928169, guid: e7931ed50d150cc48af696a35f1ca518,
         type: 3}
       propertyPath: m_Radius
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3139662337906086678, guid: e7931ed50d150cc48af696a35f1ca518,
         type: 3}
