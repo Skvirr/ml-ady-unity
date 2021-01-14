@@ -106,8 +106,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5194853894004660513}
   - component: {fileID: 4880604628038991570}
-  - component: {fileID: 5038495385122591054}
   - component: {fileID: 4191606723785575203}
+  - component: {fileID: 5038495385122591054}
+  - component: {fileID: 607406146561635994}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -151,29 +152,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &5038495385122591054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 322791727560671671}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c2ff21cf246ac4395fb53d991593b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  axleInfos:
-  - leftWheel: {fileID: 7415738808936554104}
-    rightWheel: {fileID: 4452896973643612417}
-    motor: 1
-    steering: 1
-  - leftWheel: {fileID: 6217537562893122519}
-    rightWheel: {fileID: 6250197080329863806}
-    motor: 1
-    steering: 0
-  maxMotorTorque: 325
-  maxSteeringAngle: 40
 --- !u!114 &4191606723785575203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,22 +166,68 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BrainParameters:
     VectorObservationSize: 1
-    NumStackedVectorObservations: 1
+    NumStackedVectorObservations: 3
     m_ActionSpec:
-      m_NumContinuousActions: 0
-      BranchSizes: 01000000
-    VectorActionSize: 01000000
+      m_NumContinuousActions: 2
+      BranchSizes: 02000000
+    VectorActionSize: 
     VectorActionDescriptions: []
-    VectorActionSpaceType: 0
+    VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
-  m_InferenceDevice: 1
+  m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Car Agent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_ObservableAttributeHandling: 0
+--- !u!114 &5038495385122591054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322791727560671671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c2ff21cf246ac4395fb53d991593b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 10000
+  axleInfos:
+  - leftWheel: {fileID: 7415738808936554104}
+    rightWheel: {fileID: 4452896973643612417}
+    motor: 1
+    steering: 1
+  - leftWheel: {fileID: 6217537562893122519}
+    rightWheel: {fileID: 6250197080329863806}
+    motor: 1
+    steering: 0
+  maxMotorTorque: 350
+  maxSteeringAngle: 40
+  targetTransform: {fileID: 3139662336709928087}
+  winMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
+  loseMaterial: {fileID: 2100000, guid: a1daf31cdf41e484ca9ac33a5c6f524a, type: 2}
+  floorMeshRenderer: {fileID: 3139662337428303089}
+  vehicleRigidBody: {fileID: 4880604628038991570}
+--- !u!114 &607406146561635994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 322791727560671671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &435646129657750218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,8 +1097,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3139662336709928171}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalPosition: {x: 5, y: 0.5, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 429203349648225422}
   m_RootOrder: 1
@@ -1098,7 +1122,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.25
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &3139662336709928170
 MeshRenderer:
