@@ -31,7 +31,7 @@ public class SimpleCarController : MonoBehaviour
     public void ApplyLocalPositionToVisuals(WheelCollider collider)
     {
         // https://docs.unity3d.com/ScriptReference/WheelCollider.ConfigureVehicleSubsteps.html
-        collider.ConfigureVehicleSubsteps(5f, 10, 15);
+        collider.ConfigureVehicleSubsteps(5f, 5, 15);
 
         if (collider.transform.childCount == 0)
         {
@@ -67,8 +67,8 @@ public class SimpleCarController : MonoBehaviour
             {
                 axleInfo.leftWheel.motorTorque = motor;
                 axleInfo.rightWheel.motorTorque = motor;
-                axleInfo.leftWheel.brakeTorque = Input.GetKey(KeyCode.Space) ? maxMotorTorque * 5 : 0;
-                axleInfo.rightWheel.brakeTorque = Input.GetKey(KeyCode.Space) ? maxMotorTorque * 5 : 0;
+                axleInfo.leftWheel.brakeTorque = Input.GetKey(KeyCode.Space) ? maxMotorTorque * 2 : 0;
+                axleInfo.rightWheel.brakeTorque = Input.GetKey(KeyCode.Space) ? maxMotorTorque * 2 : 0;
             }
             ApplyLocalPositionToVisuals(axleInfo.leftWheel);
             ApplyLocalPositionToVisuals(axleInfo.rightWheel);
