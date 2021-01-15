@@ -1,4 +1,3 @@
-default_settings: null
 behaviors:
   Basic:
     trainer_type: sac
@@ -18,42 +17,11 @@ behaviors:
       hidden_units: 20
       num_layers: 2
       vis_encode_type: simple
-      memory: null
     reward_signals:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    init_path: null
     keep_checkpoints: 5
-    checkpoint_interval: 500000
-    max_steps: 500000
     time_horizon: 10
     summary_freq: 2000
     threaded: true
-    self_play: null
-    behavioral_cloning: null
-    framework: pytorch
-env_settings:
-  env_path: null
-  env_args: null
-  base_port: 5005
-  num_envs: 1
-  seed: -1
-engine_settings:
-  width: 84
-  height: 84
-  quality_level: 5
-  time_scale: 20
-  target_frame_rate: -1
-  capture_frame_rate: 60
-  no_graphics: false
-environment_parameters: null
-checkpoint_settings:
-  run_id: ppo
-  initialize_from: null
-  load_model: false
-  resume: true
-  force: false
-  train_model: false
-  inference: false
-debug: false

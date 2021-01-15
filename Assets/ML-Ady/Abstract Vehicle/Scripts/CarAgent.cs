@@ -1,4 +1,4 @@
-using System.Collections;
+// using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
@@ -14,12 +14,13 @@ public class AxleInfo
     public bool steering;
 }
 
-public class SimpleCarController : Agent
+public class CarAgent : Agent
 {
     // Car
     public List<AxleInfo> axleInfos;
     public float maxMotorTorque;
     public float maxSteeringAngle;
+    [Range(0, 1f)] public float areaPercentage;
     // ML Agents
     [SerializeField] private Transform targetTransform;
     [SerializeField] private Material winMaterial;
@@ -29,8 +30,10 @@ public class SimpleCarController : Agent
 
     public override void OnEpisodeBegin()
     {
-        float radius = 20f;
-        radius = radius * 1f;
+        ResetVehicle();
+
+        float radius = 45f;
+        radius = radius * areaPercentage;
 
         transform.localPosition = new Vector3(0, 0, radius);
         transform.rotation = Quaternion.Euler(0, 180, 0);
@@ -47,12 +50,6 @@ public class SimpleCarController : Agent
         Quaternion rotation = transform.rotation;
         relativePosition = Quaternion.Inverse(rotation) * relativePosition;
 
-        Debug.Log(
-            "x: " + relativePosition.x.ToString() + " " +
-            "y: " + relativePosition.y.ToString() + " " +
-            "z: " + relativePosition.z.ToString()
-        );
-
         sensor.AddObservation(relativePosition.x);
         sensor.AddObservation(relativePosition.y);
         sensor.AddObservation(relativePosition.z);
@@ -62,10 +59,10 @@ public class SimpleCarController : Agent
     {
         float motor = maxMotorTorque * actions.ContinuousActions[0];
         float steering = maxSteeringAngle * actions.ContinuousActions[1];
-        // int brake = actions.DiscreteActions[0];
-        int brake = 0;
+        int brake = actions.DiscreteActions[0];
+        // int brake = 0;
 
-        motor = motor <= 0 ? motor * 0 : maxMotorTorque;
+        motor = motor <= 0 ? motor * 0.75f : maxMotorTorque;
 
         foreach (AxleInfo axleInfo in axleInfos)
         {
@@ -78,12 +75,14 @@ public class SimpleCarController : Agent
             {
                 axleInfo.leftWheel.motorTorque = motor;
                 axleInfo.rightWheel.motorTorque = motor;
-                axleInfo.leftWheel.brakeTorque = brake == 1 ? maxMotorTorque * 2 : 0;
-                axleInfo.rightWheel.brakeTorque = brake == 1 ? maxMotorTorque * 2 : 0;
+                axleInfo.leftWheel.brakeTorque = brake == 1 ? maxMotorTorque * 2.5f : 0;
+                axleInfo.rightWheel.brakeTorque = brake == 1 ? maxMotorTorque * 2.5f : 0;
             }
             ApplyLocalPositionToVisuals(axleInfo.leftWheel);
             ApplyLocalPositionToVisuals(axleInfo.rightWheel);
         }
+
+        AddReward(-0.02f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -122,18 +121,21 @@ public class SimpleCarController : Agent
 
     private void OnTriggerEnter(Collider other)
     {
+        if (vehicleRigidBody.velocity.x > 0.1f & vehicleRigidBody.velocity.z > 0.1f)
+        {
+            return;
+        }
+
         if (other.TryGetComponent<Goal>(out Goal goal))
         {
-            SetReward(+5f);
+            AddReward(+20f * (1f - 0.075f * (vehicleRigidBody.velocity.magnitude)));
             floorMeshRenderer.material = winMaterial;
-            ResetVehicle();
             EndEpisode();
         }
         if (other.TryGetComponent<Wall>(out Wall wall))
         {
-            SetReward(-1f);
+            AddReward(-1f);
             floorMeshRenderer.material = loseMaterial;
-            ResetVehicle();
             EndEpisode();
         }
     }

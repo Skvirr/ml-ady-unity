@@ -1,0 +1,30 @@
+{
+    "Car Agent": {
+        "checkpoints": [
+            {
+                "steps": 499964,
+                "file_path": "results\\MLady2\\Car Agent\\Car Agent-499964.onnx",
+                "reward": 8.070334707315151,
+                "creation_time": 1610730233.3175771
+            },
+            {
+                "steps": 500166,
+                "file_path": "results\\MLady2\\Car Agent\\Car Agent-500166.onnx",
+                "reward": 8.115339348249346,
+                "creation_time": 1610730233.420577
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500166,
+            "file_path": "results\\MLady2\\Car Agent.onnx",
+            "reward": 8.115339348249346,
+            "creation_time": 1610730233.420577
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.23.0",
+        "torch_version": "1.7.1",
+        "tensorflow_version": -1
+    }
+}

@@ -2,29 +2,47 @@
     "Car Agent": {
         "checkpoints": [
             {
-                "steps": 174476,
-                "file_path": "results\\ppo\\Car Agent\\Car Agent-174476.onnx",
-                "reward": null,
-                "creation_time": 1610711546.5856931
+                "steps": 194282,
+                "file_path": "results\\ppo\\Car Agent\\Car Agent-194282.onnx",
+                "reward": 12.58175957595909,
+                "creation_time": 1610728291.1215212
             },
             {
-                "steps": 225773,
-                "file_path": "results\\ppo\\Car Agent\\Car Agent-225773.onnx",
-                "reward": null,
-                "creation_time": 1610711667.5251553
+                "steps": 342431,
+                "file_path": "results\\ppo\\Car Agent\\Car Agent-342431.onnx",
+                "reward": 11.370605627695719,
+                "creation_time": 1610728459.586811
+            },
+            {
+                "steps": 425761,
+                "file_path": "results\\ppo\\Car Agent\\Car Agent-425761.onnx",
+                "reward": -6.254699560312124,
+                "creation_time": 1610728581.6210678
+            },
+            {
+                "steps": 499985,
+                "file_path": "results\\ppo\\Car Agent\\Car Agent-499985.onnx",
+                "reward": 6.101987715690367,
+                "creation_time": 1610728836.5059557
+            },
+            {
+                "steps": 500158,
+                "file_path": "results\\ppo\\Car Agent\\Car Agent-500158.onnx",
+                "reward": 5.5236792019435335,
+                "creation_time": 1610728836.5959551
             }
         ],
         "final_checkpoint": {
-            "steps": 225773,
+            "steps": 500158,
             "file_path": "results\\ppo\\Car Agent.onnx",
-            "reward": null,
-            "creation_time": 1610711667.5251553
+            "reward": 5.5236792019435335,
+            "creation_time": 1610728836.5959551
         }
     },
     "metadata": {
         "stats_format_version": "0.2.0",
         "mlagents_version": "0.23.0",
-        "torch_version": "1.7.1+cpu",
+        "torch_version": "1.7.1",
         "tensorflow_version": -1
     }
 }
