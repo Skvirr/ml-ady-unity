@@ -1,3 +1,4 @@
+// using System.Runtime;
 // using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,11 +23,18 @@ public class CarAgent : Agent
     public float maxSteeringAngle;
     [Range(0, 1f)] public float areaPercentage;
     // ML Agents
-    [SerializeField] private Transform targetTransform;
-    [SerializeField] private Material winMaterial;
-    [SerializeField] private Material loseMaterial;
-    [SerializeField] private MeshRenderer floorMeshRenderer;
-    [SerializeField] private Rigidbody vehicleRigidBody;
+    public GameObject target;
+    public Material winMaterial;
+    public Material loseMaterial;
+    public MeshRenderer floorMeshRenderer;
+    public Material winGround;
+    public Material loseGround;
+    public Rigidbody vehicleRigidbody;
+
+    private void Start()
+    {
+        vehicleRigidbody = GetComponent<Rigidbody>();
+    }
 
     public override void OnEpisodeBegin()
     {
@@ -35,17 +43,26 @@ public class CarAgent : Agent
         float radius = 45f;
         radius = radius * areaPercentage;
 
-        transform.localPosition = new Vector3(0, 0, radius);
-        transform.rotation = Quaternion.Euler(0, 180, 0);
-        // transform.rotation = Quaternion.Euler(0, Random.Range(0, 359f), 0);
-
-        targetTransform.localPosition = transform.localPosition + new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius * 1, -radius * 2));
-        // targetTransform.localPosition = new Vector3(Random.Range(-randSize, randSize), 0.5f, Random.Range(-randSize, randSize));
+        transform.localPosition = new Vector3(
+            0f * radius + Random.Range(-radius * 0.25f, radius * 0.25f),
+            0,
+            0.9f * radius + Random.Range(-radius * 0.1f, radius * 0.1f)
+        );
+        transform.rotation = Quaternion.Euler(
+            0,
+            180 + Random.Range(-180 * areaPercentage, 180 * areaPercentage),
+            0
+        );
+        target.transform.localPosition = new Vector3(
+            transform.localPosition.x + Random.Range(-radius, radius),
+            20f,
+            transform.localPosition.z + Random.Range(-radius * 0, -radius * 2)
+        );
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        Vector3 relativePosition = targetTransform.localPosition - transform.localPosition;
+        Vector3 relativePosition = target.transform.localPosition - transform.localPosition;
 
         Quaternion rotation = transform.rotation;
         relativePosition = Quaternion.Inverse(rotation) * relativePosition;
@@ -53,6 +70,12 @@ public class CarAgent : Agent
         sensor.AddObservation(relativePosition.x);
         sensor.AddObservation(relativePosition.y);
         sensor.AddObservation(relativePosition.z);
+
+        Vector3 gravityDirection = (transform.rotation * Vector3.down).normalized;
+
+        sensor.AddObservation(gravityDirection.x);
+        sensor.AddObservation(gravityDirection.y);
+        sensor.AddObservation(gravityDirection.z);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
@@ -114,28 +137,28 @@ public class CarAgent : Agent
             ApplyLocalPositionToVisuals(axleInfo.rightWheel);
         }
 
-        vehicleRigidBody.velocity = Vector3.zero;
-        vehicleRigidBody.angularVelocity = Vector3.zero;
-        vehicleRigidBody.Sleep();
+        vehicleRigidbody.velocity = Vector3.zero;
+        vehicleRigidbody.angularVelocity = Vector3.zero;
+        vehicleRigidbody.Sleep();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (vehicleRigidBody.velocity.x > 0.1f & vehicleRigidBody.velocity.z > 0.1f)
+        if (vehicleRigidbody.velocity.x > 0.1f & vehicleRigidbody.velocity.z > 0.1f)
         {
             return;
         }
 
-        if (other.TryGetComponent<Goal>(out Goal goal))
+        if (other.TryGetComponent<TrashSpawner>(out TrashSpawner trashSpawner))
         {
-            AddReward(+20f * (1f - 0.075f * (vehicleRigidBody.velocity.magnitude)));
-            floorMeshRenderer.material = winMaterial;
+            AddReward(+20f * (1f - 0.075f * (vehicleRigidbody.velocity.magnitude)));
+            floorMeshRenderer.material = winGround;
             EndEpisode();
         }
         if (other.TryGetComponent<Wall>(out Wall wall))
         {
             AddReward(-1f);
-            floorMeshRenderer.material = loseMaterial;
+            floorMeshRenderer.material = loseGround;
             EndEpisode();
         }
     }
